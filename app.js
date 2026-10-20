@@ -39,6 +39,8 @@
   let S;
   try { S = JSON.parse(localStorage.getItem(KEY)) || defaults(); } catch (e) { S = defaults(); }
   S.settings = Object.assign(defaults().settings, S.settings || {});
+  S.weights = S.weights || {};
+  if (S.settings.goalBw == null) S.settings.goalBw = 75;
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { toast('Could not save — storage full?'); } };
 
   function lastPos() {
@@ -136,12 +138,43 @@
         <button class="stat" data-act="tab" data-tab="train" style="text-align:left"><span>Pull-up e1RM</span><b class="num">${signed(pull)} kg</b><span>goal +${S.settings.goalPull}</span></button>
         <button class="stat" data-act="tab" data-tab="train" style="text-align:left"><span>Dip e1RM</span><b class="num">${signed(dip)} kg</b><span>goal +${S.settings.goalDip}</span></button>
       </div>
+      ${bwCard()}
       <div class="sect"><h2>To do</h2><a href="#" data-act="tab" data-tab="plan">Open plan</a></div>
       <div class="card">${todoList(all)}${addRow()}</div>
       <div class="sect"><h2>Mind</h2><a href="#" data-act="tab" data-tab="mind">Open</a></div>
       <div class="card">${m ? `<div class="row between"><div><div class="big num">${m.min}<small>/ ${S.settings.mindTarget} min</small></div><div class="muted small">${esc(m.topic || '')}</div></div><span class="pill ${m.min >= S.settings.mindTarget ? 'acc' : 'warn'}">${m.min >= S.settings.mindTarget ? 'Target hit' : 'Below target'}</span></div>`
         : `<div class="row between"><div><h3>No study logged yet</h3><div class="muted small">Target ${S.settings.mindTarget} min · be honest</div></div><button class="btn sm primary" data-act="tab" data-tab="mind">Log</button></div>`}</div>
       ${weekStrip()}`;
+  }
+  function bwRate() {
+    const ks = Object.keys(S.weights).sort();
+    if (ks.length < 2) return null;
+    const last = ks[ks.length - 1];
+    // compare against the weigh-in closest to 14 days earlier (at least 6 days apart)
+    let ref = null;
+    for (const k of ks) { const days = (new Date(last) - new Date(k)) / 864e5; if (days >= 6) ref = k; }
+    if (!ref) return null;
+    const days = (new Date(last) - new Date(ref)) / 864e5;
+    return (S.weights[last] - S.weights[ref]) / days * 7;
+  }
+  function bwCard() {
+    const bw = S.settings.bw, goal = S.settings.goalBw;
+    const r = bwRate();
+    const lo = bw * 0.0025, hi = bw * 0.005; // 0.25–0.5 % of bodyweight per week
+    let verdict = 'Weigh in 2–3× a week, same time (morning, after toilet).', tone = '';
+    if (r != null) {
+      if (bw >= goal) { verdict = 'Target reached — eat at maintenance now.'; tone = 'acc'; }
+      else if (r > hi * 1.2) { verdict = `Gaining too fast (+${r.toFixed(2)} kg/wk) — more of it is fat. Cut ~200 kcal/day.`; tone = 'warn'; }
+      else if (r < lo * 0.6) { verdict = `Gaining too slowly (${r >= 0 ? '+' : ''}${r.toFixed(2)} kg/wk). Add ~200 kcal/day.`; tone = 'warn'; }
+      else { verdict = `On track: +${r.toFixed(2)} kg/wk (aim ${lo.toFixed(2)}–${hi.toFixed(2)}).`; tone = 'acc'; }
+    }
+    const today_ = S.weights[today()];
+    return `<div class="card" style="margin-top:12px"><div class="row between"><div><span class="label">Bodyweight · lean bulk</span>
+      <div class="big num" style="margin-top:2px">${(+bw).toFixed(1)}<small>kg → ${goal}</small></div></div>
+      ${r != null ? `<span class="pill ${tone}">${r >= 0 ? '+' : ''}${r.toFixed(2)} kg/wk</span>` : ''}</div>
+      <div class="progress" style="margin-top:10px"><i style="width:${Math.max(0, Math.min(100, (bw - 70) / Math.max(0.1, goal - 70) * 100))}%"></i></div>
+      <p class="small ${tone === 'warn' ? '' : 'muted'}" style="margin:10px 0 12px;${tone === 'warn' ? 'color:var(--warn)' : ''}">${verdict}</p>
+      <form class="add-row" data-form="bw" style="margin:0"><input class="input num" name="kg" inputmode="decimal" placeholder="${today_ != null ? 'Today: ' + (+today_).toFixed(1) + ' kg (update)' : 'Today\'s weight, kg'}" autocomplete="off"><button class="btn primary" aria-label="Save weight" style="width:auto;padding:0 16px;font-size:15px">Save</button></form></div>`;
   }
   function greet() { const h = new Date().getHours(); return h < 5 ? 'Late night.' : h < 12 ? 'Morning.' : h < 18 ? 'Afternoon.' : 'Evening.'; }
   function exPreview(e) {
@@ -359,7 +392,7 @@
         <button class="done-btn" data-act="done" data-ex="${i}" data-set="${j}">${tick2}</button></div>`).join('');
     } else {
       const isHold = e.type === 'hold', hasLoad = e.type === 'main' || e.type === 'load';
-      head = `<div class="set-head"><span>#</span><span>${isHold ? 'sec' : 'reps'}</span><span>${hasLoad ? '+kg' : ''}</span><span>RPE</span><span></span></div>`;
+      head = `<div class="set-head"><span>#</span><span>${isHold ? 'sec' : 'reps'}</span><span>${e.type === 'main' ? '+kg' : e.type === 'load' ? 'kg' : ''}</span><span>RPE</span><span></span></div>`;
       rows = e.sets.map((s, j) => `<div class="set ${s.done ? 'done' : ''}"><span class="n">${j + 1}</span>
         <div class="cell"><input inputmode="numeric" data-ex="${i}" data-set="${j}" data-f="${isHold ? 'sec' : 'reps'}" value="${esc(isHold ? s.sec : s.reps)}"><em>${isHold ? 's' : '×'}</em></div>
         <div class="cell">${hasLoad ? `<input inputmode="decimal" data-ex="${i}" data-set="${j}" data-f="load" value="${esc(s.load)}"><em>kg</em>` : `<div class="small muted" style="text-align:center">${s.trpe ? '@' + s.trpe : ''}</div>`}</div>
@@ -449,6 +482,7 @@
     }
     for (const e of log.ex) {
       const def = F.EX[e.key];
+      if (!def) continue;
       if (!['bw', 'load', 'hold'].includes(def.type) || !e.sets.some(x => x.done)) continue;
       const pb = before.prog[e.key], pa = after.prog[e.key];
       const ot = pb ? pb.t : def.lo, nt = pa ? pa.t : def.lo;
@@ -482,7 +516,7 @@
         <div class="grid2">${f('bw', 'Bodyweight (kg)', st.bw)}${f('inc', 'Smallest plate jump (kg)', st.inc)}</div>
         <div class="grid2">${f('basePull', 'Pull-up 1RM, added kg (start)', st.basePull)}${f('baseDip', 'Dip 1RM, added kg (start)', st.baseDip)}</div>
         <div class="grid2">${f('goalPull', 'Pull-up goal (+kg)', st.goalPull)}${f('goalDip', 'Dip goal (+kg)', st.goalDip)}</div>
-        <div class="grid2">${f('mindTarget', 'Daily study target (min)', st.mindTarget)}${f('rowStart', 'Row start weight (kg)', st.startLoads.row ?? 40)}</div>
+        <div class="grid2">${f('mindTarget', 'Daily study target (min)', st.mindTarget)}${f('goalBw', 'Bulk target bodyweight (kg)', st.goalBw)}</div>
         <button class="btn primary block">Save</button>
       </form>
       <hr class="sep"><span class="label">Program position</span>
@@ -616,10 +650,14 @@
       const prev = S.mind[today()] || {};
       S.mind[today()] = { ...prev, min, topic: f.topic.value.trim(), insight: f.insight.value.trim(), appliedNote: f.appliedNote.value.trim(), applied: !!f.appliedNote.value.trim(), honest: f.honest.value || null };
       save(); render(); toast(min >= S.settings.mindTarget ? 'Saved. Target hit.' : 'Saved. Honest beats impressive.');
+    } else if (kind === 'bw') {
+      const v = parseFloat(String(f.kg.value).replace(',', '.'));
+      if (!isFinite(v) || v < 35 || v > 200) { toast('Enter your weight in kg'); return; }
+      S.weights[today()] = v; S.settings.bw = v; save(); render(); toast('Weight saved. Loads use your new bodyweight.');
     } else if (kind === 'settings') {
       const n = k => { const v = parseFloat(String(f[k].value).replace(',', '.')); return isFinite(v) ? v : S.settings[k]; };
       Object.assign(S.settings, { bw: n('bw'), inc: n('inc') || 2.5, basePull: n('basePull'), baseDip: n('baseDip'), goalPull: n('goalPull'), goalDip: n('goalDip'), mindTarget: n('mindTarget') });
-      const rs = parseFloat(f.rowStart.value); if (isFinite(rs)) S.settings.startLoads.row = rs;
+      const gb = parseFloat(String(f.goalBw.value).replace(',', '.')); if (isFinite(gb)) S.settings.goalBw = gb;
       save(); closeModal(); render(); toast('Settings saved.');
     }
   });

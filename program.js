@@ -22,17 +22,43 @@
   }
 
   // ---------- Exercise library ----------
+  // type: main = e1RM-driven weighted lift · load = weighted accessory (double progression)
+  //       bw = bodyweight reps · hold = seconds · run / check
+  // hyp: true = physique (hypertrophy) accessory — trimmed by 1 set in the peak block
+  // inc: weight jump for that exercise (dumbbells usually move 1–2 kg)
   const EX = {
     wpu:   { name: 'Weighted Pull-up', type: 'main', lift: 'pull', rest: 210,
              cue: 'Dead hang start, chin clearly over bar. Same depth every rep.' },
     wdip:  { name: 'Weighted Dip', type: 'main', lift: 'dip', rest: 210,
              cue: 'Shoulders just below elbows at the bottom, full lockout on top.' },
-    row:   { name: 'Barbell / Chest-supported Row', type: 'load', lo: 8, hi: 10, rpe: 8, rest: 120, start: 40,
-             cue: 'Pause 1s at the top. Supports pull-up lockout and elbow health.' },
+
+    // back & biceps
+    row:   { name: 'Chest-supported Row', type: 'load', lo: 8, hi: 12, rpe: 8, rest: 120, start: 40, hyp: true,
+             cue: 'Machine, T-bar or incline-bench DB row. Full stretch at the bottom, squeeze 1 s at the top. Upper-back thickness.' },
+    pulldown: { name: 'Lat Pulldown', type: 'load', lo: 10, hi: 15, rpe: 8.5, rest: 90, start: 50, hyp: true,
+             cue: 'Neutral or shoulder-width grip. Let the lats stretch fully at the top, pull elbows to your sides. Lat width without more pull-up fatigue.' },
+    sarow: { name: 'Single-arm DB Row', type: 'load', lo: 8, hi: 12, rpe: 8.5, rest: 90, start: 26, inc: 2, hyp: true,
+             cue: 'Per arm, weight = one dumbbell. Reach long at the bottom, drive elbow to the hip.' },
+    preacher: { name: 'Preacher Curl', type: 'load', lo: 8, hi: 12, rpe: 8.5, rest: 90, start: 20, inc: 1.25, hyp: true,
+             cue: 'EZ bar or DB. Control the bottom — the stretched position is where this grows the arm. Weight = total on the bar.' },
+    hammer:{ name: 'Hammer Curl', type: 'load', lo: 8, hi: 12, rpe: 8.5, rest: 75, start: 12, inc: 2, hyp: true,
+             cue: 'Weight = one dumbbell. Brachialis + forearm thickness; neutral grip is elbow-friendly with heavy pulling.' },
+    face:  { name: 'Face Pull', type: 'bw', lo: 15, hi: 25, rpe: 8, rest: 45,
+             cue: 'Cable or band. Rear delts and external rotation — keeps shoulders healthy under heavy pressing.' },
+
+    // chest, triceps, delts
+    incdb: { name: 'Incline DB Press', type: 'load', lo: 8, hi: 12, rpe: 8, rest: 120, start: 22, inc: 2, hyp: true,
+             cue: 'Bench at ~30°. Weight = one dumbbell. Deep stretch at the bottom. Upper chest — the part dips miss.' },
+    fly:   { name: 'Cable Fly / Pec Deck', type: 'load', lo: 10, hi: 15, rpe: 8.5, rest: 75, start: 15, hyp: true,
+             cue: 'Big stretch, soft elbows. Chest without extra triceps/shoulder fatigue.' },
+    ohext: { name: 'Overhead Triceps Extension', type: 'load', lo: 10, hi: 15, rpe: 8.5, rest: 90, start: 20, hyp: true,
+             cue: 'Cable or DB behind the head. Overhead = long head stretched; grew ~40% more than pushdowns in a 12-week study.' },
+    lateral: { name: 'Lateral Raise', type: 'load', lo: 12, hi: 20, rpe: 9, rest: 60, start: 8, inc: 1, hyp: true,
+             cue: 'Weight = one dumbbell (or cable). Lead with elbows, slight lean. Side delts = shoulder width. Can go close to failure.' },
+
+    // skills
     hlr:   { name: 'Hanging Leg Raise', type: 'bw', lo: 8, hi: 15, rpe: 8, rest: 75,
              cue: 'No swing. Toes to bar when range is easy.' },
-    face:  { name: 'Band Pull-apart / Face Pull', type: 'bw', lo: 15, hi: 25, rpe: 7, rest: 45,
-             cue: 'Shoulder health — rear delts and external rotation.' },
     hshold:{ name: 'Freestanding Handstand Hold', type: 'hold', lo: 20, hi: 60, rpe: 7, rest: 60,
              cue: 'Stacked line, push tall. Kick up fresh each set.' },
     fshspu:{ name: 'Freestanding HSPU', type: 'bw', lo: 1, hi: 5, rpe: 8, rest: 120,
@@ -44,17 +70,18 @@
     neg90: { name: '90° Negatives', type: 'bw', lo: 2, hi: 5, rpe: 8, rest: 150,
              cue: 'From handstand lower 3–5 s into the 90° (planche-ish) position, hold 1–2 s. When 4×5 is easy, attempt a full 90° press as rep 1.' },
     plean: { name: 'Planche Lean', type: 'hold', lo: 10, hi: 30, rpe: 8, rest: 90,
-             cue: 'Protracted, locked arms, lean until shoulders are well past hands.' },
-    pppu:  { name: 'Pseudo-planche Push-up', type: 'bw', lo: 6, hi: 12, rpe: 8, rest: 90,
-             cue: 'Hands by the hips, fingers out, keep the lean the whole rep.' },
-    bwpu:  { name: 'Pull-up (bodyweight, fast)', type: 'bw', lo: 6, hi: 12, rpe: 7, rest: 90,
-             cue: 'Explosive up, controlled down. Leave 3 reps in the tank.' },
+             cue: 'Protracted, locked arms, lean until shoulders are well past hands. Straight-arm strength for the 90° press.' },
     lsit:  { name: 'L-sit', type: 'hold', lo: 10, hi: 30, rpe: 8, rest: 60,
              cue: 'Depressed shoulders, locked knees. Supports the 90° press.' },
-    rdl:   { name: 'Romanian Deadlift', type: 'load', lo: 5, hi: 8, rpe: 7, rest: 150, start: 60,
-             cue: 'Soft knees, push hips back, bar close to legs, flat back. Stop when hamstrings are stretched. Type your real weight the first time — the app remembers it.' },
-    bss:   { name: 'Bulgarian Split Squat', type: 'load', lo: 8, hi: 12, rpe: 8, rest: 90, start: 0,
-             cue: 'Per leg. Dumbbells when bodyweight gets easy. Keeps legs strong for running.' },
+
+    // legs
+    rdl:   { name: 'Romanian Deadlift', type: 'load', lo: 8, hi: 12, rpe: 8, rest: 150, start: 60, hyp: true,
+             cue: 'Soft knees, hips back, bar close, flat back. Stop at a full hamstring stretch. Hamstrings + glutes.' },
+    bss:   { name: 'Bulgarian Split Squat', type: 'load', lo: 8, hi: 12, rpe: 8, rest: 90, start: 0, inc: 2, hyp: true,
+             cue: 'Per leg, weight = one dumbbell (0 = bodyweight). Long stance + deep knee = glutes, short stance = quads.' },
+    calf:  { name: 'Standing Calf Raise', type: 'load', lo: 10, hi: 15, rpe: 8.5, rest: 60, start: 40, hyp: true,
+             cue: 'Pause 2 s in the deep stretch at the bottom, full rise on top. Machine or Smith.' },
+
     mob:   { name: 'Shoulder & Wrist Mobility', type: 'check', min: 10, rest: 0,
              cue: 'Wrist rocks, shoulder dislocates, thoracic opener, pec stretch.' },
     run:   { name: 'Easy Run', type: 'run', rest: 0,
@@ -77,7 +104,7 @@
   function block(w) {
     if (w === 4 || w === 8) return { name: 'Deload', tone: 'calm' };
     if (w <= 3) return { name: 'Rebuild', tone: 'build' };
-    if (w <= 7) return { name: 'Strength', tone: 'build' };
+    if (w <= 7) return { name: 'Strength + Size', tone: 'build' };
     if (w <= 11) return { name: 'Peak', tone: 'hard' };
     return { name: 'Test week', tone: 'hard' };
   }
@@ -87,9 +114,12 @@
     return base;
   }
   const isDeload = w => w === 4 || w === 8 || w === 12;
+  const isPeak = w => w >= 9 && w <= 11;
 
   function acc(key, sets, w) {
-    const s = isDeload(w) ? Math.max(2, sets - 1) : sets;
+    let s = sets;
+    if (isDeload(w)) s = Math.max(2, sets - 1);
+    else if (isPeak(w) && EX[key].hyp) s = Math.max(2, sets - 1); // free up recovery for heavy singles
     return { key, sets: s };
   }
 
@@ -97,20 +127,20 @@
   function dayTemplate(w, d) {
     const run = (extra) => ({ key: 'run', minutes: runMin(w, d), note: extra || '' });
     switch (d) {
-      case 1: return { title: w === 12 ? 'Pull-up Max Test' : 'Heavy Pull', focus: 'Pull strength', items: [
+      case 1: return { title: w === 12 ? 'Pull-up Max Test' : 'Heavy Pull + Back & Biceps', focus: 'Pull strength · back width & thickness · biceps', items: [
         { key: 'wpu', groups: HEAVY[w], note: w === 12 ? 'Work up: single @8, @9, then a true max attempt. Full 4–5 min rest.' : '' },
-        acc('row', 3, w), acc('hlr', 3, w), acc('face', 2, w), run()] };
-      case 2: return { title: 'Handstand Strength', focus: 'HSPU + 90°', items: [
-        acc('hshold', 5, w), acc('fshspu', 5, w), acc('dhspu', 4, w), acc('neg90', 4, w), run()] };
-      case 3: return { title: w === 12 ? 'Dip Max Test' : 'Heavy Dip + Legs', focus: 'Push strength + posterior chain', items: [
+        acc('row', 3, w), acc('pulldown', 3, w), acc('preacher', 3, w), acc('face', 2, w), acc('hlr', 3, w), run()] };
+      case 2: return { title: 'Handstand + Shoulders', focus: 'HSPU · 90° · side delts', items: [
+        acc('hshold', 5, w), acc('fshspu', 5, w), acc('dhspu', 4, w), acc('neg90', 4, w), acc('lateral', 4, w), run()] };
+      case 3: return { title: w === 12 ? 'Dip Max Test' : 'Heavy Dip + Chest, Triceps, Legs', focus: 'Push strength · upper chest · triceps · hamstrings', items: [
         { key: 'wdip', groups: HEAVY[w], note: w === 12 ? 'Work up: single @8, @9, then a true max attempt.' : '' },
-        acc('rdl', 3, w), acc('bwpu', 3, w), acc('lsit', 4, w), run('Keep it truly easy today — legs worked.')] };
+        acc('incdb', 3, w), acc('ohext', 3, w), acc('rdl', 3, w), acc('lsit', 3, w), run('Keep it truly easy today — legs worked.')] };
       case 4: return { title: 'Recovery', focus: 'Aerobic base', items: [
         run('Longest run of the week — still easy.'), { key: 'mob', sets: 1 }, acc('hshold', 4, w)] };
-      case 5: return { title: 'Volume Pull + HSPU', focus: 'Pull volume', items: [
-        { key: 'wpu', groups: VOLUME[w] }, acc('whspu', 4, w), acc('plean', 4, w), acc('face', 2, w), run()] };
-      case 6: return { title: 'Volume Dip + 90°', focus: 'Push volume', items: [
-        { key: 'wdip', groups: VOLUME[w] }, acc('neg90', 4, w), acc('pppu', 3, w), acc('bss', 3, w),
+      case 5: return { title: 'Volume Pull + Arms & Delts', focus: 'Pull volume · lats · arms · side delts', items: [
+        { key: 'wpu', groups: VOLUME[w] }, acc('whspu', 3, w), acc('sarow', 3, w), acc('hammer', 3, w), acc('lateral', 3, w), acc('plean', 3, w), run()] };
+      case 6: return { title: 'Volume Dip + Chest & Legs', focus: 'Push volume · 90° · chest · quads & glutes', items: [
+        { key: 'wdip', groups: VOLUME[w] }, acc('neg90', 4, w), acc('fly', 3, w), acc('bss', 3, w), acc('calf', 3, w),
         run(w >= 3 && !isDeload(w) ? 'Finish with 6 × 15 s relaxed strides.' : '')] };
       case 7: return { title: 'Rest', focus: 'Recover', items: [
         { key: 'run', minutes: 20, note: 'Optional. If readiness is low, walk instead.' }, { key: 'mob', sets: 1 }] };
@@ -172,7 +202,7 @@
             const minDone = Math.min(...done.map(val));
             P.t = Math.max(tgt + step, Math.min(minDone, def.hi + step));
             if (P.t > def.hi) {
-              if (def.type === 'load') { P.load = Number(P.load) + s.inc; P.t = def.lo; msgs[ex.key] = 'Weight up'; }
+              if (def.type === 'load') { P.load = Number(P.load) + (def.inc || s.inc); P.t = def.lo; msgs[ex.key] = 'Weight up'; }
               else if (def.type === 'bw') { P.t = def.lo; P.lvl++; msgs[ex.key] = 'Level up — make it harder'; }
               else { P.t = def.hi; msgs[ex.key] = 'Maxed — progress the variation'; }
             }
@@ -237,11 +267,12 @@
         let n = it.sets;
         if (readiness === 'low') n = Math.max(2, n - 1);
         e.target = P.t;
+        const trpe = out.deload ? def.rpe - 1 : def.rpe;
         for (let i = 0; i < n; i++) {
-          if (def.type === 'hold') e.sets.push({ tsec: P.t, sec: P.t, trpe: def.rpe, rpe: null, done: false });
-          else e.sets.push({ treps: P.t, reps: P.t, trpe: def.rpe, load: def.type === 'load' ? P.load : undefined, rpe: null, done: false });
+          if (def.type === 'hold') e.sets.push({ tsec: P.t, sec: P.t, trpe, rpe: null, done: false });
+          else e.sets.push({ treps: P.t, reps: P.t, trpe, load: def.type === 'load' ? P.load : undefined, rpe: null, done: false });
         }
-        e.summary = def.type === 'hold' ? `${n}×${P.t}s` : `${n}×${P.t}` + (def.type === 'load' ? ` · ${P.load ? P.load + ' kg' : 'BW'}` : '') + ` @${def.rpe}`;
+        e.summary = def.type === 'hold' ? `${n}×${P.t}s` : `${n}×${P.t}` + (def.type === 'load' ? ` · ${P.load ? P.load + ' kg' : 'BW'}` : '') + ` @${trpe}`;
         if (P.lvl) e.lvl = P.lvl;
         if (rep.msgs[it.key]) e.flag = rep.msgs[it.key] + (def.type === 'bw' ? ' (raise deficit / harder variation, reps reset).' : '.');
       }
