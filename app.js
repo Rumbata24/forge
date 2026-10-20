@@ -130,7 +130,7 @@
         ${trainedToday ? '<div class="small" style="color:var(--good);margin-top:10px;font-weight:700">✓ Trained today — this is your next one</div>' : ''}<div class="hero-title">${esc(sess.title)}</div>
         <div class="muted small">${esc(sess.focus)}</div>
         <div class="ex-list">${lines}</div>
-        <div class="row"><button class="btn primary" style="flex:1" data-act="start">Start workout</button><button class="btn ghost" data-act="skip">Skip</button></div>
+        <div class="row"><button class="btn primary" style="flex:1" data-act="start">Start &amp; log workout</button><button class="btn ghost" data-act="skip">Skip</button></div>
       </div>`}
       <div class="grid2">
         <button class="stat" data-act="tab" data-tab="train" style="text-align:left"><span>Pull-up e1RM</span><b class="num">${signed(pull)} kg</b><span>goal +${S.settings.goalPull}</span></button>
@@ -334,6 +334,7 @@
         <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
         <div style="text-align:center"><div class="small muted">${A.editId ? 'Editing · ' + fmtDay(A.date) : posLabel(s.pos)}</div><b>${esc(s.title)}</b></div>
         <button class="icon-btn" data-act="timer-start" aria-label="Rest timer"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg></button></div>
+      ${!A.editId ? `<div class="card" style="padding:12px 14px;margin-bottom:12px;border-color:#343a2a"><b style="color:var(--acc)">How to log</b><div class="small muted" style="margin-top:4px">The numbers are the plan. If you did something different, <b style="color:var(--text)">tap the reps or kg and type what you actually did</b>. Then tap ✓ and pick how hard it felt (RPE). Press <b style="color:var(--text)">Finish</b> and the coach updates your next workouts.</div></div>` : ''}
       ${s.coach && s.coach.length ? `<div class="flag" style="margin:0 0 12px">${s.coach.map(esc).join('<br>')}</div>` : ''}
       ${s.note ? `<div class="flag" style="margin:0 0 12px;color:var(--muted);background:var(--s1)">${esc(s.note)}</div>` : ''}
       ${s.ex.map((e, i) => exCard(e, i)).join('')}
@@ -587,7 +588,18 @@
       const st = S.active.session.ex[+t.dataset.ex].sets[+t.dataset.set];
       const f = t.dataset.f;
       st[f] = f === 'km' ? t.value : (t.value === '' ? '' : Number(t.value.replace(',', '.')));
-      if (f === 'load') st.edited = true;
+      if (f === 'load') {
+        st.edited = true;
+        // changing the weight on one set carries it to the remaining sets you haven't done yet
+        const ex = S.active.session.ex[+t.dataset.ex];
+        ex.sets.forEach((r, k) => {
+          if (k > +t.dataset.set && !r.done && !r.edited) {
+            r.load = st.load;
+            const el = document.querySelector(`input[data-ex="${t.dataset.ex}"][data-set="${k}"][data-f="load"]`);
+            if (el) el.value = st.load;
+          }
+        });
+      }
       save();
     }
   });
