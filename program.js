@@ -51,6 +51,8 @@
              cue: 'Explosive up, controlled down. Leave 3 reps in the tank.' },
     lsit:  { name: 'L-sit', type: 'hold', lo: 10, hi: 30, rpe: 8, rest: 60,
              cue: 'Depressed shoulders, locked knees. Supports the 90° press.' },
+    rdl:   { name: 'Romanian Deadlift', type: 'load', lo: 5, hi: 8, rpe: 7, rest: 150, start: 60,
+             cue: 'Soft knees, push hips back, bar close to legs, flat back. Stop when hamstrings are stretched. Type your real weight the first time — the app remembers it.' },
     bss:   { name: 'Bulgarian Split Squat', type: 'load', lo: 8, hi: 12, rpe: 8, rest: 90, start: 0,
              cue: 'Per leg. Dumbbells when bodyweight gets easy. Keeps legs strong for running.' },
     mob:   { name: 'Shoulder & Wrist Mobility', type: 'check', min: 10, rest: 0,
@@ -100,9 +102,9 @@
         acc('row', 3, w), acc('hlr', 3, w), acc('face', 2, w), run()] };
       case 2: return { title: 'Handstand Strength', focus: 'HSPU + 90°', items: [
         acc('hshold', 5, w), acc('fshspu', 5, w), acc('dhspu', 4, w), acc('neg90', 4, w), run()] };
-      case 3: return { title: w === 12 ? 'Dip Max Test' : 'Heavy Dip', focus: 'Push strength', items: [
+      case 3: return { title: w === 12 ? 'Dip Max Test' : 'Heavy Dip + Legs', focus: 'Push strength + posterior chain', items: [
         { key: 'wdip', groups: HEAVY[w], note: w === 12 ? 'Work up: single @8, @9, then a true max attempt.' : '' },
-        acc('bwpu', 3, w), acc('lsit', 4, w), run()] };
+        acc('rdl', 3, w), acc('bwpu', 3, w), acc('lsit', 4, w), run('Keep it truly easy today — legs worked.')] };
       case 4: return { title: 'Recovery', focus: 'Aerobic base', items: [
         run('Longest run of the week — still easy.'), { key: 'mob', sets: 1 }, acc('hshold', 4, w)] };
       case 5: return { title: 'Volume Pull + HSPU', focus: 'Pull volume', items: [

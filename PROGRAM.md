@@ -8,7 +8,7 @@
 |---|---|---|
 | D1 | Heavy Pull | Weighted pull-up (heavy), row, hanging leg raise, face pulls, run |
 | D2 | Handstand Strength | Freestanding HS hold, freestanding HSPU, deficit wall HSPU, 90° negatives, run |
-| D3 | Heavy Dip | Weighted dip (heavy), fast bodyweight pull-ups, L-sit, run |
+| D3 | Heavy Dip + Legs | Weighted dip (heavy), Romanian deadlift 3×5–8 @7, fast bodyweight pull-ups, L-sit, easy run |
 | D4 | Recovery | Longest easy run, mobility, light handstand holds |
 | D5 | Volume Pull + HSPU | Weighted pull-up (volume), wall HSPU, planche lean, face pulls, run |
 | D6 | Volume Dip + 90° | Weighted dip (volume), 90° negatives, pseudo-planche push-ups, split squats, run + strides |
@@ -45,6 +45,9 @@ Runs: 20 min in weeks 1–2, 25 min in weeks 3–5, 30 min from week 6, always e
 - **Running daily won't kill upper-body strength.** Recent meta-analyses (Schumann 2022, Huiberts 2023) found essentially no interference for upper-body maximal strength. What does show interference is hard lower-body work and sprinting near lifting. So: runs are easy, done after lifting or 3+ hours apart, and intervals are limited to light strides.
 - **Linear and undulating periodization give similar strength results** (Harries et al. meta-analysis). Variety and progressive overload matter more, so the program mixes heavy and volume days and changes rep ranges every block.
 - **HSPU and 90° progressions** (Barbell Physio, skill-tree resources): deficit wall HSPU, then freestanding singles and doubles, then 90° negatives with planche leans and pseudo-planche push-ups. Low reps for the hardest skills. Don't skip rungs.
+
+## Legs
+Two leg sessions a week: Romanian deadlift on D3 (hamstrings and glutes, the muscles that also protect you when running) and Bulgarian split squat on D6 (quads, one leg at a time). Both stay at RPE 7–8 so they don't clash with daily running. The run on D3 is kept truly easy.
 
 ## Rules that keep you healthy
 - Leave reps in the tank. RPE 10 is for test week only.
