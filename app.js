@@ -85,11 +85,11 @@
   function stopTimer() { clearInterval(timerI); $('#timer').hidden = true; }
 
   // ---------- render root ----------
-  function setTab(t) { S.tab = t; save(); render(); window.scrollTo(0, 0); }
+  function setTab(t) { S.tab = (t === 'plan' || t === 'mind') ? 'today' : t; save(); render(); window.scrollTo(0, 0); }
   function render() {
     document.querySelectorAll('.tab').forEach(b => b.classList.toggle('on', b.dataset.tab === S.tab));
     const v = $('#view');
-    v.innerHTML = ({ today: viewToday, train: viewTrain, mind: viewMind, plan: viewPlan }[S.tab] || viewToday)();
+    v.innerHTML = ({ today: viewToday, train: viewTrain }[S.tab] || viewToday)();
     if (S.active && $('#sheet').hidden) renderSession();
   }
 
@@ -120,10 +120,6 @@
     const lines = sess.ex.map(e => `<div class="ex-line"><span>${esc(e.name)}</span><span class="num">${esc(exPreview(e))}</span></div>`).join('');
     return `
       <div class="page-h"><div class="eyebrow">${fmtDay(d, { weekday: 'long', day: 'numeric', month: 'long' })}</div><h1>${greet()}</h1></div>
-      <div class="card">
-        <div class="row between"><span class="label">Today</span><span class="small muted num">${done}/${all.length} done</span></div>
-        <div class="progress" style="margin-top:10px"><i style="width:${all.length ? (done / all.length) * 100 : 0}%"></i></div>
-      </div>
       ${S.active ? `<div class="card hero"><span class="pill acc"><span class="dot"></span>In progress</span>
         <div class="hero-title">${esc(S.active.session.title)}</div><p class="muted small">${posLabel(S.active.session.pos)}</p>
         <button class="btn primary block" data-act="resume">Resume workout</button></div>` : `
@@ -139,11 +135,6 @@
         <button class="stat" data-act="tab" data-tab="train" style="text-align:left"><span>Dip e1RM</span><b class="num">${signed(dip)} kg</b><span>goal +${S.settings.goalDip}</span></button>
       </div>
       ${bwCard()}
-      <div class="sect"><h2>To do</h2><a href="#" data-act="tab" data-tab="plan">Open plan</a></div>
-      <div class="card">${todoList(all)}${addRow()}</div>
-      <div class="sect"><h2>Mind</h2><a href="#" data-act="tab" data-tab="mind">Open</a></div>
-      <div class="card">${m ? `<div class="row between"><div><div class="big num">${m.min}<small>/ ${S.settings.mindTarget} min</small></div><div class="muted small">${esc(m.topic || '')}</div></div><span class="pill ${m.min >= S.settings.mindTarget ? 'acc' : 'warn'}">${m.min >= S.settings.mindTarget ? 'Target hit' : 'Below target'}</span></div>`
-        : `<div class="row between"><div><h3>No study logged yet</h3><div class="muted small">Target ${S.settings.mindTarget} min · be honest</div></div><button class="btn sm primary" data-act="tab" data-tab="mind">Log</button></div>`}</div>
       ${weekStrip()}`;
   }
   function bwRate() {
@@ -189,103 +180,12 @@
     for (let i = 6; i >= 0; i--) days.push(addDays(d, -i));
     const cells = days.map(x => {
       const tr = S.logs.some(l => l.date === x && !l.skipped);
-      const mm = S.mind[x] && S.mind[x].min >= S.settings.mindTarget;
       return `<div style="text-align:center"><div class="small muted">${fmtDay(x, { weekday: 'narrow' })}</div>
         <div style="margin-top:6px;display:grid;gap:4px;justify-items:center">
-        <span style="width:22px;height:22px;border-radius:7px;background:${tr ? 'var(--acc)' : 'var(--s3)'}"></span>
-        <span style="width:22px;height:6px;border-radius:3px;background:${mm ? 'var(--blue)' : 'var(--s3)'}"></span></div></div>`;
+        <span style="width:22px;height:22px;border-radius:7px;background:${tr ? 'var(--acc)' : 'var(--s3)'}"></span></div></div>`;
     }).join('');
-    return `<div class="sect"><h2>Last 7 days</h2><span class="small muted"><span style="color:var(--acc)">■</span> trained <span style="color:var(--blue)">▬</span> studied</span></div>
+    return `<div class="sect"><h2>Last 7 days</h2><span class="small muted"><span style="color:var(--acc)">■</span> trained </span></div>
       <div class="card" style="display:grid;grid-template-columns:repeat(7,1fr)">${cells}</div>`;
-  }
-
-  // ---------- PLAN ----------
-  function todoList(items) {
-    if (!items.length) return `<div class="empty">Nothing yet. What pushes you past your limit today?</div>`;
-    const sorted = [...items].sort((a, b) => (a.done - b.done) || ((b.star ? 1 : 0) - (a.star ? 1 : 0)));
-    return sorted.map(t => `<div class="todo ${t.done ? 'done' : ''}">
-      <button class="check ${t.done ? 'on' : ''}" data-act="${t.auto ? 'auto-' + t.auto : 'todo-toggle'}" data-id="${t.id}" aria-label="toggle"></button>
-      <div class="txt">${esc(t.text)}${t.auto ? ' <span class="pill" style="margin-left:4px">auto</span>' : ''}</div>
-      ${t.auto ? '' : `<button class="star ${t.star ? 'on' : ''}" data-act="todo-star" data-id="${t.id}" aria-label="priority">★</button><button class="del" data-act="todo-del" data-id="${t.id}" aria-label="delete">×</button>`}
-    </div>`).join('');
-  }
-  const addRow = () => `<form class="add-row" data-form="todo" style="margin:12px 0 0"><input class="input" name="t" placeholder="Add a task for today…" autocomplete="off"><button class="btn primary" aria-label="Add">+</button></form>`;
-  function viewPlan() {
-    const d = today();
-    const { auto, list } = dayTasks(d);
-    const all = [...auto, ...list];
-    const done = all.filter(t => t.done).length;
-    const over = S.todos.filter(t => t.date < d && !t.done);
-    const tomorrow = S.todos.filter(t => t.date === addDays(d, 1));
-    const last7 = []; for (let i = 6; i >= 0; i--) { const x = addDays(d, -i); const ts = S.todos.filter(t => t.date === x); last7.push(ts.length ? ts.filter(t => t.done).length / ts.length : null); }
-    const valid = last7.filter(x => x != null);
-    const rate = valid.length ? Math.round(valid.reduce((a, b) => a + b, 0) / valid.length * 100) : null;
-    return `
-      <div class="page-h"><div class="eyebrow">${fmtDay(d, { weekday: 'long', day: 'numeric', month: 'long' })}</div><h1>Today's plan</h1></div>
-      <div class="grid2" style="margin-bottom:12px">
-        <div class="stat"><span>Done today</span><b class="num">${done}/${all.length}</b></div>
-        <div class="stat"><span>Tasks done (7d)</span><b class="num">${rate == null ? '—' : rate + '%'}</b></div>
-      </div>
-      ${over.length ? `<div class="card" style="border-color:#4a3a1c"><div class="row between"><div><h3>${over.length} unfinished from before</h3><div class="muted small">Move them to today or let them go.</div></div></div>
-        <div style="margin-top:8px">${over.map(t => `<div class="todo"><div class="txt">${esc(t.text)} <span class="small muted">· ${fmtDay(t.date)}</span></div><button class="btn sm ghost" data-act="todo-move" data-id="${t.id}">Today</button><button class="del" data-act="todo-del" data-id="${t.id}">×</button></div>`).join('')}</div>
-        <button class="btn sm primary" data-act="todo-move-all" style="margin-top:10px">Move all to today</button></div>` : ''}
-      <div class="card">${todoList(all)}${addRow()}<p class="small muted" style="margin:10px 2px 0">★ = must-do. Keep it to 3–5 things that actually move you forward.</p></div>
-      <div class="sect"><h2>Tomorrow</h2></div>
-      <div class="card">${tomorrow.length ? tomorrow.map(t => `<div class="todo"><div class="txt">${esc(t.text)}</div><button class="del" data-act="todo-del" data-id="${t.id}">×</button></div>`).join('') : '<div class="empty">Plan tomorrow tonight — it takes 1 minute.</div>'}
-        <form class="add-row" data-form="todo-tmr" style="margin:12px 0 0"><input class="input" name="t" placeholder="Add for tomorrow…" autocomplete="off"><button class="btn" aria-label="Add">+</button></form></div>`;
-  }
-
-  // ---------- MIND ----------
-  function viewMind() {
-    const d = today();
-    const m = S.mind[d] || {};
-    const tgt = S.settings.mindTarget;
-    const days = []; for (let i = 6; i >= 0; i--) days.push(addDays(d, -i));
-    const mx = Math.max(tgt, ...days.map(x => (S.mind[x] || {}).min || 0));
-    const bars = days.map(x => { const v = (S.mind[x] || {}).min || 0; return `<div><i class="${v >= tgt ? 'hit' : ''}" style="height:${Math.max(4, v / mx * 70)}px"></i><span>${fmtDay(x, { weekday: 'narrow' })}</span></div>`; }).join('');
-    let streak = 0; for (let i = 0; ; i++) { const x = addDays(d, -i); const e = S.mind[x]; if (e && e.min >= tgt) streak++; else if (i === 0) continue; else break; if (i > 999) break; }
-    const keys = Object.keys(S.mind).sort();
-    const totalMin = keys.reduce((a, k) => a + (S.mind[k].min || 0), 0);
-    let hit30 = 0; for (let i = 0; i < 30; i++) { const e = S.mind[addDays(d, -i)]; if (e && e.min >= tgt) hit30++; }
-    const honestN = keys.filter(k => S.mind[k].honest).length;
-    const honestYes = keys.filter(k => S.mind[k].honest === 'yes').length;
-    const appliedN = keys.filter(k => S.mind[k].applied).length;
-    // recall check: an insight older than 3 days
-    const older = keys.filter(k => k <= addDays(d, -3) && S.mind[k].insight);
-    const rk = older.length ? older[(new Date().getDate() * 7) % older.length] : null;
-    const recalls = keys.flatMap(k => S.mind[k].recall || []);
-    const recallRate = recalls.length ? Math.round(recalls.filter(r => r.ok).length / recalls.length * 100) : null;
-    const recent = keys.filter(k => S.mind[k].insight).reverse().slice(0, 10);
-    return `
-      <div class="page-h"><div class="eyebrow">Psychology</div><h1>Mind log</h1></div>
-      <div class="grid3" style="margin-bottom:12px">
-        <div class="stat"><span>Streak</span><b class="num">${streak}d</b></div>
-        <div class="stat"><span>Last 30d</span><b class="num">${hit30}/30</b></div>
-        <div class="stat"><span>Total</span><b class="num">${(totalMin / 60).toFixed(1)}h</b></div>
-      </div>
-      <div class="card"><div class="row between"><span class="label">This week</span><span class="small muted">target ${tgt} min</span></div><div class="bars">${bars}</div></div>
-      <div class="sect"><h2>Today</h2>${S.mind[d] ? '<span class="pill acc">Saved</span>' : ''}</div>
-      <form class="card" data-form="mind">
-        <div class="field"><label>Minutes actually studied</label>
-          <div class="stepper"><button type="button" data-act="mstep" data-v="-5">−</button><input name="min" inputmode="numeric" class="num" value="${m.min ?? 0}"><button type="button" data-act="mstep" data-v="5">+</button></div></div>
-        <div class="field"><label>Topic / source</label><input class="input" name="topic" value="${esc(m.topic || '')}" placeholder="e.g. Cialdini — reciprocity, ch. 2"></div>
-        <div class="field"><label>Explain what you learned in your own words</label><textarea class="input" name="insight" placeholder="If you can't explain it simply, you didn't learn it yet.">${esc(m.insight || '')}</textarea></div>
-        <div class="field"><label>Did you use it today? (a conversation, a sale, on yourself)</label><input class="input" name="appliedNote" value="${esc(m.appliedNote || '')}" placeholder="Leave empty if not — that's fine, just be honest"></div>
-        <div class="field"><label>Honest check: did you do what you planned?</label>
-          <div class="honest">${['yes', 'partly', 'no'].map(h => `<button type="button" data-act="honest" data-v="${h}" class="${m.honest === h ? 'on' : ''}">${h[0].toUpperCase() + h.slice(1)}</button>`).join('')}</div><input type="hidden" name="honest" value="${esc(m.honest || '')}"></div>
-        <button class="btn primary block">Save today</button>
-      </form>
-      ${rk ? `<div class="card hero"><span class="label">Recall check</span><p style="margin:8px 0 4px">Can you still explain this without looking?</p>
-        <p class="muted small" style="margin:0 0 12px">${fmtDay(rk)} · ${esc(S.mind[rk].topic || 'untitled')}</p>
-        <details><summary class="small muted" style="margin-bottom:10px">Reveal your note</summary><p class="small">${esc(S.mind[rk].insight)}</p></details>
-        <div class="row"><button class="btn sm primary" data-act="recall" data-k="${rk}" data-v="1">Yes, clearly</button><button class="btn sm ghost" data-act="recall" data-k="${rk}" data-v="0">Fuzzy</button></div></div>` : ''}
-      <div class="grid3" style="margin:12px 0">
-        <div class="stat"><span>Did as planned</span><b class="num">${honestN ? Math.round(honestYes / honestN * 100) + '%' : '—'}</b></div>
-        <div class="stat"><span>Applied</span><b class="num">${appliedN}×</b></div>
-        <div class="stat"><span>Recall</span><b class="num">${recallRate == null ? '—' : recallRate + '%'}</b></div>
-      </div>
-      <div class="sect"><h2>Your insights</h2></div>
-      <div class="card">${recent.length ? recent.map(k => `<div class="insight"><div class="row between"><span class="small muted">${fmtDay(k)} · ${S.mind[k].min} min</span>${S.mind[k].applied ? '<span class="pill acc">applied</span>' : ''}</div><b>${esc(S.mind[k].topic || '')}</b><p class="small">${esc(S.mind[k].insight)}</p></div>`).join('') : '<div class="empty">Your explained insights will collect here.</div>'}</div>`;
   }
 
   // ---------- TRAIN ----------
@@ -516,7 +416,7 @@
         <div class="grid2">${f('bw', 'Bodyweight (kg)', st.bw)}${f('inc', 'Smallest plate jump (kg)', st.inc)}</div>
         <div class="grid2">${f('basePull', 'Pull-up 1RM, added kg (start)', st.basePull)}${f('baseDip', 'Dip 1RM, added kg (start)', st.baseDip)}</div>
         <div class="grid2">${f('goalPull', 'Pull-up goal (+kg)', st.goalPull)}${f('goalDip', 'Dip goal (+kg)', st.goalDip)}</div>
-        <div class="grid2">${f('mindTarget', 'Daily study target (min)', st.mindTarget)}${f('goalBw', 'Bulk target bodyweight (kg)', st.goalBw)}</div>
+        <div class="grid2">${f('goalBw', 'Bulk target bodyweight (kg)', st.goalBw)}</div>
         <button class="btn primary block">Save</button>
       </form>
       <hr class="sep"><span class="label">Program position</span>
@@ -588,16 +488,7 @@
       }
       case 'start-at': S.nextOverride = JSON.parse(d.pos); save(); closeModal(); setTab('today'); break;
       case 'edit-log': editLog(d.id); break;
-      case 'todo-toggle': { const x = S.todos.find(q => q.id === d.id); if (x) x.done = !x.done; save(); render(); break; }
-      case 'todo-star': { const x = S.todos.find(q => q.id === d.id); if (x) x.star = !x.star; save(); render(); break; }
-      case 'todo-del': S.todos = S.todos.filter(q => q.id !== d.id); save(); render(); break;
-      case 'todo-move': { const x = S.todos.find(q => q.id === d.id); if (x) x.date = today(); save(); render(); break; }
-      case 'todo-move-all': S.todos.forEach(q => { if (q.date < today() && !q.done) q.date = today(); }); save(); render(); break;
       case 'auto-train': if (!t.classList.contains('on')) askReadiness(nextPos()); break;
-      case 'auto-mind': setTab('mind'); break;
-      case 'mstep': { const inp = t.parentElement.querySelector('input'); inp.value = Math.max(0, (+inp.value || 0) + +d.v); break; }
-      case 'honest': { t.parentElement.querySelectorAll('button').forEach(b => b.classList.toggle('on', b === t)); t.closest('form').honest.value = d.v; break; }
-      case 'recall': { const e = S.mind[d.k]; (e.recall = e.recall || []).push({ date: today(), ok: d.v === '1' }); save(); render(); toast(d.v === '1' ? 'Locked in.' : 'Re-read it today — that\'s how it sticks.'); break; }
       case 'jump': {
         const w = Math.min(F.WEEKS, Math.max(1, +$('#jw').value || 1)), dd = Math.min(7, Math.max(1, +$('#jd').value || 1));
         S.nextOverride = { c: nextPos().c, w, d: dd }; save(); closeModal(); render(); toast(`Next: Week ${w} · Day ${dd}`); break;
@@ -640,17 +531,7 @@
   document.addEventListener('submit', ev => {
     ev.preventDefault();
     const f = ev.target, kind = f.dataset.form;
-    if (kind === 'todo' || kind === 'todo-tmr') {
-      const v = f.t.value.trim(); if (!v) return;
-      S.todos.push({ id: uid(), text: v, date: kind === 'todo' ? today() : addDays(today(), 1), done: false, star: false });
-      save(); render();
-      const inp = document.querySelector(`[data-form="${kind}"] input`); if (inp) inp.focus();
-    } else if (kind === 'mind') {
-      const min = Math.max(0, +f.min.value || 0);
-      const prev = S.mind[today()] || {};
-      S.mind[today()] = { ...prev, min, topic: f.topic.value.trim(), insight: f.insight.value.trim(), appliedNote: f.appliedNote.value.trim(), applied: !!f.appliedNote.value.trim(), honest: f.honest.value || null };
-      save(); render(); toast(min >= S.settings.mindTarget ? 'Saved. Target hit.' : 'Saved. Honest beats impressive.');
-    } else if (kind === 'bw') {
+    if (kind === 'bw') {
       const v = parseFloat(String(f.kg.value).replace(',', '.'));
       if (!isFinite(v) || v < 35 || v > 200) { toast('Enter your weight in kg'); return; }
       S.weights[today()] = v; S.settings.bw = v; save(); render(); toast('Weight saved. Loads use your new bodyweight.');

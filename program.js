@@ -30,57 +30,57 @@
     wpu:   { name: 'Weighted Pull-up', type: 'main', lift: 'pull', rest: 210,
              cue: 'Dead hang start, chin clearly over bar. Same depth every rep.' },
     wdip:  { name: 'Weighted Dip', type: 'main', lift: 'dip', rest: 210,
-             cue: 'Shoulders just below elbows at the bottom, full lockout on top.' },
+             cue: 'Shoulders just below elbows at the bottom, full lockout on top. Lower chest.' },
 
-    // back & biceps
-    row:   { name: 'Chest-supported Row', type: 'load', lo: 8, hi: 12, rpe: 8, rest: 120, start: 40, hyp: true,
-             cue: 'Machine, T-bar or incline-bench DB row. Full stretch at the bottom, squeeze 1 s at the top. Upper-back thickness.' },
-    pulldown: { name: 'Lat Pulldown', type: 'load', lo: 10, hi: 15, rpe: 8.5, rest: 90, start: 50, hyp: true,
-             cue: 'Neutral or shoulder-width grip. Let the lats stretch fully at the top, pull elbows to your sides. Lat width without more pull-up fatigue.' },
-    sarow: { name: 'Single-arm DB Row', type: 'load', lo: 8, hi: 12, rpe: 8.5, rest: 90, start: 26, inc: 2, hyp: true,
+    // back & biceps (physique: 2 sets to ~10 reps, or 3 sets, all close to failure)
+    row:   { name: 'Barbell Row', type: 'load', lo: 8, hi: 12, rpe: 9, rest: 120, start: 60, inc: 2.5, hyp: true,
+             cue: 'Hinge ~45°, bar to lower chest, pause 1 s on top. Close to failure. Upper-back thickness.' },
+    pulldown: { name: 'Lat Pulldown', type: 'load', lo: 8, hi: 12, rpe: 9, rest: 90, start: 50, inc: 2.5, hyp: true,
+             cue: 'Full stretch at the top, pull elbows to your sides. Lat width.' },
+    sarow: { name: 'Single-arm DB Row', type: 'load', lo: 8, hi: 12, rpe: 9, rest: 90, start: 26, inc: 2, hyp: true,
              cue: 'Per arm, weight = one dumbbell. Reach long at the bottom, drive elbow to the hip.' },
-    preacher: { name: 'Preacher Curl', type: 'load', lo: 8, hi: 12, rpe: 8.5, rest: 90, start: 20, inc: 1.25, hyp: true,
-             cue: 'EZ bar or DB. Control the bottom — the stretched position is where this grows the arm. Weight = total on the bar.' },
-    hammer:{ name: 'Hammer Curl', type: 'load', lo: 8, hi: 12, rpe: 8.5, rest: 75, start: 12, inc: 2, hyp: true,
-             cue: 'Weight = one dumbbell. Brachialis + forearm thickness; neutral grip is elbow-friendly with heavy pulling.' },
+    preacher: { name: 'Preacher Curl', type: 'load', lo: 8, hi: 12, rpe: 9, rest: 90, start: 20, inc: 1.25, hyp: true,
+             cue: 'Control the bottom — the stretched position is where this grows the arm. Weight = total on the bar.' },
+    hammer:{ name: 'Hammer Curl', type: 'load', lo: 8, hi: 12, rpe: 9, rest: 75, start: 12, inc: 2, hyp: true,
+             cue: 'Weight = one dumbbell. Brachialis and forearm.' },
     face:  { name: 'Face Pull', type: 'bw', lo: 15, hi: 25, rpe: 8, rest: 45,
              cue: 'Cable or band. Rear delts and external rotation — keeps shoulders healthy under heavy pressing.' },
 
-    // chest, triceps, delts
-    incdb: { name: 'Incline DB Press', type: 'load', lo: 8, hi: 12, rpe: 8, rest: 120, start: 22, inc: 2, hyp: true,
-             cue: 'Bench at ~30°. Weight = one dumbbell. Deep stretch at the bottom. Upper chest — the part dips miss.' },
-    fly:   { name: 'Cable Fly / Pec Deck', type: 'load', lo: 10, hi: 15, rpe: 8.5, rest: 75, start: 15, hyp: true,
-             cue: 'Big stretch, soft elbows. Chest without extra triceps/shoulder fatigue.' },
-    ohext: { name: 'Overhead Triceps Extension', type: 'load', lo: 10, hi: 15, rpe: 8.5, rest: 90, start: 20, hyp: true,
+    // chest & triceps (chest day = dip lower + incline DB upper + DB fly middle/stretch)
+    incdb: { name: 'Incline DB Press', type: 'load', lo: 8, hi: 12, rpe: 9, rest: 120, start: 22, inc: 2, hyp: true,
+             cue: 'Bench ~30°. Weight = one dumbbell. Deep stretch at the bottom. Upper chest.' },
+    fly:   { name: 'Dumbbell Fly', type: 'load', lo: 8, hi: 12, rpe: 9, rest: 75, start: 12, inc: 2, hyp: true,
+             cue: 'Slight elbow bend, lower to a deep stretch across the chest, squeeze over the midline. Middle chest and the big stretch.' },
+    ohext: { name: 'Overhead Triceps Extension', type: 'load', lo: 10, hi: 15, rpe: 9, rest: 90, start: 20, inc: 2.5, hyp: true,
              cue: 'Cable or DB behind the head. Overhead = long head stretched; grew ~40% more than pushdowns in a 12-week study.' },
-    lateral: { name: 'Lateral Raise', type: 'load', lo: 12, hi: 20, rpe: 9, rest: 60, start: 8, inc: 1, hyp: true,
-             cue: 'Weight = one dumbbell (or cable). Lead with elbows, slight lean. Side delts = shoulder width. Can go close to failure.' },
 
     // skills
-    hlr:   { name: 'Hanging Leg Raise', type: 'bw', lo: 8, hi: 15, rpe: 8, rest: 75,
-             cue: 'No swing. Toes to bar when range is easy.' },
     hshold:{ name: 'Freestanding Handstand Hold', type: 'hold', lo: 20, hi: 60, rpe: 7, rest: 60,
-             cue: 'Stacked line, push tall. Kick up fresh each set.' },
+             cue: 'Stacked line, push tall. Kick up fresh each set. First in the session.' },
+    neg90: { name: '90° Negatives', type: 'bw', lo: 2, hi: 5, rpe: 8, rest: 150,
+             cue: 'From handstand lower 3–5 s into the 90° position, hold 1–2 s. Hardest skill first, so it gets your freshest rep.' },
     fshspu:{ name: 'Freestanding HSPU', type: 'bw', lo: 1, hi: 5, rpe: 8, rest: 120,
              cue: 'Quality singles/doubles. Stop before balance breaks down.' },
     dhspu: { name: 'Deficit Wall HSPU', type: 'bw', lo: 3, hi: 8, rpe: 8, rest: 150,
              cue: 'Hands on parallettes/plates, 5–10 cm deficit. When you hit 4×8, raise the deficit.' },
     whspu: { name: 'Wall HSPU (strict)', type: 'bw', lo: 4, hi: 10, rpe: 8, rest: 120,
              cue: 'Head to floor (or deficit), elbows ~45°. Controlled 2s down.' },
-    neg90: { name: '90° Negatives', type: 'bw', lo: 2, hi: 5, rpe: 8, rest: 150,
-             cue: 'From handstand lower 3–5 s into the 90° (planche-ish) position, hold 1–2 s. When 4×5 is easy, attempt a full 90° press as rep 1.' },
-    plean: { name: 'Planche Lean', type: 'hold', lo: 10, hi: 30, rpe: 8, rest: 90,
-             cue: 'Protracted, locked arms, lean until shoulders are well past hands. Straight-arm strength for the 90° press.' },
-    lsit:  { name: 'L-sit', type: 'hold', lo: 10, hi: 30, rpe: 8, rest: 60,
-             cue: 'Depressed shoulders, locked knees. Supports the 90° press.' },
+    hlr:   { name: 'Hanging Leg Raise', type: 'bw', lo: 8, hi: 15, rpe: 9, rest: 75, hyp: true,
+             cue: 'No swing. Close to failure. Toes to bar when range is easy.' },
 
     // legs
-    rdl:   { name: 'Romanian Deadlift', type: 'load', lo: 8, hi: 12, rpe: 8, rest: 150, start: 60, hyp: true,
-             cue: 'Soft knees, hips back, bar close, flat back. Stop at a full hamstring stretch. Hamstrings + glutes.' },
-    bss:   { name: 'Bulgarian Split Squat', type: 'load', lo: 8, hi: 12, rpe: 8, rest: 90, start: 0, inc: 2, hyp: true,
-             cue: 'Per leg, weight = one dumbbell (0 = bodyweight). Long stance + deep knee = glutes, short stance = quads.' },
-    calf:  { name: 'Standing Calf Raise', type: 'load', lo: 10, hi: 15, rpe: 8.5, rest: 60, start: 40, hyp: true,
-             cue: 'Pause 2 s in the deep stretch at the bottom, full rise on top. Machine or Smith.' },
+    rdl:   { name: 'Romanian Deadlift', type: 'load', lo: 8, hi: 12, rpe: 9, rest: 150, start: 60, inc: 2.5, hyp: true,
+             cue: 'Soft knees, hips back, bar close, flat back. Stop at a full hamstring stretch. Hamstrings and glutes.' },
+    slp:   { name: 'Single-leg Press', type: 'load', lo: 8, hi: 12, rpe: 9, rest: 90, start: 60, inc: 5, hyp: true,
+             cue: 'Machine, one leg at a time. Full depth without the lower back rounding, drive through the whole foot. Quads and glutes.' },
+    calf:  { name: 'Standing Calf Raise', type: 'load', lo: 10, hi: 15, rpe: 9, rest: 60, start: 40, inc: 5, hyp: true,
+             cue: 'Pause 2 s in the deep stretch at the bottom, full rise on top.' },
+
+    // legacy entries kept so old logs still display (not in the program any more)
+    lateral: { name: 'Lateral Raise (legacy)', type: 'load', lo: 12, hi: 20, rpe: 9, rest: 60, start: 8, inc: 1, hyp: true, cue: '' },
+    plean: { name: 'Planche Lean (legacy)', type: 'hold', lo: 10, hi: 30, rpe: 8, rest: 90, cue: '' },
+    lsit:  { name: 'L-sit (legacy)', type: 'hold', lo: 10, hi: 30, rpe: 8, rest: 60, cue: '' },
+    bss:   { name: 'Bulgarian Split Squat (legacy)', type: 'load', lo: 8, hi: 12, rpe: 8, rest: 90, start: 0, inc: 2, hyp: true, cue: '' },
 
     mob:   { name: 'Shoulder & Wrist Mobility', type: 'check', min: 10, rest: 0,
              cue: 'Wrist rocks, shoulder dislocates, thoracic opener, pec stretch.' },
@@ -124,23 +124,24 @@
   }
 
   // day templates → list of {key, groups? (main), sets? (other), note}
+  // Order inside a day = order of work. Skills go first, hardest first.
   function dayTemplate(w, d) {
     const run = (extra) => ({ key: 'run', minutes: runMin(w, d), note: extra || '' });
     switch (d) {
       case 1: return { title: w === 12 ? 'Pull-up Max Test' : 'Heavy Pull + Back & Biceps', focus: 'Pull strength · back width & thickness · biceps', items: [
         { key: 'wpu', groups: HEAVY[w], note: w === 12 ? 'Work up: single @8, @9, then a true max attempt. Full 4–5 min rest.' : '' },
-        acc('row', 3, w), acc('pulldown', 3, w), acc('preacher', 3, w), acc('face', 2, w), acc('hlr', 3, w), run()] };
-      case 2: return { title: 'Handstand + Shoulders', focus: 'HSPU · 90° · side delts', items: [
-        acc('hshold', 5, w), acc('fshspu', 5, w), acc('dhspu', 4, w), acc('neg90', 4, w), acc('lateral', 4, w), run()] };
-      case 3: return { title: w === 12 ? 'Dip Max Test' : 'Heavy Dip + Chest, Triceps, Legs', focus: 'Push strength · upper chest · triceps · hamstrings', items: [
+        acc('row', 2, w), acc('pulldown', 3, w), acc('preacher', 3, w), acc('face', 2, w), acc('hlr', 3, w), run()] };
+      case 2: return { title: 'Handstand + Shoulders', focus: 'Handstand hold → 90° negatives → HSPU → deficit HSPU', items: [
+        acc('hshold', 5, w), acc('neg90', 4, w), acc('fshspu', 5, w), acc('dhspu', 4, w), run()] };
+      case 3: return { title: w === 12 ? 'Dip Max Test' : 'Heavy Dip + Chest, Triceps, Legs', focus: 'Chest: dip (lower) · incline DB (upper) · DB fly (middle + stretch)', items: [
         { key: 'wdip', groups: HEAVY[w], note: w === 12 ? 'Work up: single @8, @9, then a true max attempt.' : '' },
-        acc('incdb', 3, w), acc('ohext', 3, w), acc('rdl', 3, w), acc('lsit', 3, w), run('Keep it truly easy today — legs worked.')] };
+        acc('incdb', 3, w), acc('fly', 3, w), acc('ohext', 3, w), acc('rdl', 3, w), acc('hlr', 3, w), run('Keep it truly easy today — legs worked.')] };
       case 4: return { title: 'Recovery', focus: 'Aerobic base', items: [
         run('Longest run of the week — still easy.'), { key: 'mob', sets: 1 }, acc('hshold', 4, w)] };
-      case 5: return { title: 'Volume Pull + Arms & Delts', focus: 'Pull volume · lats · arms · side delts', items: [
-        { key: 'wpu', groups: VOLUME[w] }, acc('whspu', 3, w), acc('sarow', 3, w), acc('hammer', 3, w), acc('lateral', 3, w), acc('plean', 3, w), run()] };
-      case 6: return { title: 'Volume Dip + Chest & Legs', focus: 'Push volume · 90° · chest · quads & glutes', items: [
-        { key: 'wdip', groups: VOLUME[w] }, acc('neg90', 4, w), acc('fly', 3, w), acc('bss', 3, w), acc('calf', 3, w),
+      case 5: return { title: 'Volume Pull + Arms', focus: 'Pull volume · lats · arms', items: [
+        { key: 'wpu', groups: VOLUME[w] }, acc('whspu', 3, w), acc('sarow', 3, w), acc('hammer', 3, w), run()] };
+      case 6: return { title: 'Volume Dip + Chest & Legs', focus: 'Chest: dip (lower) · incline DB (upper) · DB fly (middle + stretch) · quads & glutes', items: [
+        { key: 'wdip', groups: VOLUME[w] }, acc('neg90', 4, w), acc('incdb', 3, w), acc('fly', 3, w), acc('slp', 3, w), acc('calf', 3, w),
         run(w >= 3 && !isDeload(w) ? 'Finish with 6 × 15 s relaxed strides.' : '')] };
       case 7: return { title: 'Rest', focus: 'Recover', items: [
         { key: 'run', minutes: 20, note: 'Optional. If readiness is low, walk instead.' }, { key: 'mob', sets: 1 }] };

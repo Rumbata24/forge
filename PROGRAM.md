@@ -12,16 +12,16 @@
 
 ## The week
 
-Every day starts with the main lift or skill, done fresh. The physique work comes after.
+Every day starts with the main lift or skill, done fresh. The physique work comes after. Both chest days (D3 and D6) always include all three chest exercises: dip (lower), incline DB press (upper) and dumbbell fly (middle and stretch). Only the dip is heavy. The other two are hypertrophy work.
 
 | Day | Session | Exercises |
 |---|---|---|
-| **D1** | Heavy Pull + Back & Biceps | **Weighted pull-up (heavy)**, chest-supported row 3×8–12, lat pulldown 3×10–15, preacher curl 3×8–12, face pull 2×15–25, hanging leg raise 3×8–15, easy run |
-| **D2** | Handstand + Shoulders | Handstand hold 5×, **freestanding HSPU 5×1–5**, **deficit wall HSPU 4×3–8**, **90° negatives 4×2–5**, lateral raise 4×12–20, easy run |
-| **D3** | Heavy Dip + Chest, Triceps, Legs | **Weighted dip (heavy)**, incline DB press 3×8–12, overhead triceps extension 3×10–15, Romanian deadlift 3×8–12, L-sit 3×, easy run |
+| **D1** | Heavy Pull + Back & Biceps | **Weighted pull-up (heavy)**, barbell row 2×8–12 @60 kg (close to failure), lat pulldown 3×8–12, preacher curl 3×8–12, face pull 2×15–25, hanging leg raise 3×8–15, easy run |
+| **D2** | Handstand + Shoulders | In this order, hardest skills first: **freestanding handstand hold 5×**, **90° negatives 4×2–5**, **freestanding HSPU 5×1–5**, **deficit wall HSPU 4×3–8**, easy run |
+| **D3** | Heavy Dip + Chest, Triceps, Legs | **Weighted dip (heavy, lower chest)**, incline DB press 3×8–12 (upper chest), dumbbell fly 3×8–12 (middle chest + stretch), overhead triceps extension 3×10–15, Romanian deadlift 3×8–12, hanging leg raise 3×8–15, easy run |
 | **D4** | Recovery | Longest easy run, mobility 10 min, light handstand holds |
-| **D5** | Volume Pull + Arms & Delts | **Weighted pull-up (volume)**, wall HSPU 3×4–10, single-arm DB row 3×8–12, hammer curl 3×8–12, lateral raise 3×12–20, planche lean 3×, easy run |
-| **D6** | Volume Dip + Chest & Legs | **Weighted dip (volume)**, **90° negatives 4×2–5**, cable fly / pec deck 3×10–15, Bulgarian split squat 3×8–12, calf raise 3×10–15, easy run + strides |
+| **D5** | Volume Pull + Arms | **Weighted pull-up (volume)**, wall HSPU 3×4–10, single-arm DB row 3×8–12, hammer curl 3×8–12, easy run |
+| **D6** | Volume Dip + Chest & Legs | **Weighted dip (volume, lower chest)**, **90° negatives 4×2–5**, incline DB press 3×8–12 (upper chest), dumbbell fly 3×8–12 (middle chest + stretch), single-leg press 3×8–12, calf raise 3×10–15, easy run + strides |
 | **D7** | Rest | Optional 20 min easy run, mobility |
 
 The app runs the days in order, not by calendar date. Miss a day and you continue where you left off.
@@ -32,19 +32,22 @@ Indirect work counts as half a set: a set of dips counts as ½ a triceps set. Th
 
 | Muscle | Direct | + indirect | Total | Research range for growth |
 |---|---|---|---|---|
-| Lats / upper back | 9 pull-up + 9 rows/pulldowns | (n/a) | **~18** | 12–20+ ✓ |
-| Biceps | 6 curls | 9 from pulling | **~15** | ✓ |
-| Chest | 9 dips + 6 press/fly | (n/a) | **~15** | ✓ |
+| Lats / upper back | 9 pull-up + ~8 rows/pulldowns | (n/a) | **~17** | 12–20+ ✓ |
+| Biceps | 6 curls (preacher, hammer) | ~9 from pulling | **~15** | ✓ |
+| Chest | 9 dips + 6 incline/fly | (n/a) | **~15** | ✓ |
 | Triceps | 3 overhead ext. | ~16 from dips/HSPU/press | **~19** | ✓ |
-| Side delts | 7 lateral raises | ~7 from HSPU/press | **~14** | ✓ |
+| Side delts | none (lateral raises removed) | ~10 from HSPU/press | **~10** | below range — see note |
 | Rear delts | 4 face pulls | ~4 from rows | **~8** | maintenance+ |
-| Hamstrings / glutes | 3 RDL | ~2 from BSS | **~5** + running | moderate (intentional) |
-| Quads | 3 BSS | (n/a) | **3** + daily running | moderate (intentional) |
+| Hamstrings / glutes | 3 RDL | (n/a) | **~3** + running | moderate (intentional) |
+| Quads | 6 single-leg press | (n/a) | **6** + daily running | moderate (intentional) |
 | Calves | 3 | (n/a) | 3 + running | moderate |
 
 Legs are deliberately moderate. Daily running already loads them, and heavy leg volume close to running is where the interference between running and lifting actually shows up. Upper-body muscles sit in the growth range.
 
 ---
+
+## Secondary (physique) exercise rule
+Every physique accessory is either **2 sets close to failure (RPE 9, ~10 reps)** or **3 sets close to failure (RPE 9, weight chosen so the last rep is hard)**. Deload weeks drop one RPE point; peak weeks (9–11) drop one set, which leaves 2 sets.
 
 ## Blocks
 
